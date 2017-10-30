@@ -1,25 +1,25 @@
 package com.softonic.instamaterial.domain.interactors;
 
 public interface InteractorLocator {
-  GetPhoto getPhoto();
+    GetPhoto getPhoto();
 
-  GetPhotos getPhotos();
+    GetPhotos getPhotos();
 
-  GetUser getUser();
+    GetUser getUser();
 
-  UpdateUser updateUser();
+    UpdateUser updateUser();
 
-  GetPhotoLikes getPhotoLikes();
+    GetPhotoLikes getPhotoLikes();
 
-  GetPhotoComments getPhotoComments();
+    GetPhotoComments getPhotoComments();
 
-  LikePhoto likePhoto();
+    LikePhoto likePhoto();
 
-  GetAuthenticatedUserUid getLoggedUser();
+    GetAuthenticatedUserUid getLoggedUser();
 
-  PublishPhoto publishPhoto();
+    PublishPhoto publishPhoto();
 
-  UploadPhoto uploadPhoto();
+    UploadPhoto uploadPhoto();
 
-  PublishComment publishComment();
+    PublishComment publishComment();
 }

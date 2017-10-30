@@ -1,9 +1,9 @@
 package com.softonic.instamaterial.domain.executor;
 
 public interface UseCaseExecutorLocator {
-  ThreadExecutor threadExecutor();
+    ThreadExecutor threadExecutor();
 
-  PostExecutor postExecutor();
+    PostExecutor postExecutor();
 
-  UseCaseExecutor useCaseExecutor();
+    UseCaseExecutor useCaseExecutor();
 }

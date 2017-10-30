@@ -1,11 +1,11 @@
 package com.softonic.instamaterial.ui.orchestrator;
 
 public interface OrchestratorLocator {
-  GetFeedItem getFeedItem();
+    GetFeedItem getFeedItem();
 
-  GetFeedItems getFeedItems();
+    GetFeedItems getFeedItems();
 
-  GetCommentItems getCommentItems();
+    GetCommentItems getCommentItems();
 
-  GetCommentItem getCommentItem();
+    GetCommentItem getCommentItem();
 }

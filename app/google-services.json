@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "626422287682",
+    "firebase_url": "https://instamaterial-b2936.firebaseio.com",
+    "project_id": "instamaterial-b2936",
+    "storage_bucket": "instamaterial-b2936.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:626422287682:android:036ee2e78c94cb02",
+        "android_client_info": {
+          "package_name": "com.softonic.instamaterial"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "626422287682-j60f684advnh7739ihv49cps7jffpgss.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.softonic.instamaterial",
+            "certificate_hash": "25b6a4ccda675f0149c04b17ccd24167e5b50ff3"
+          }
+        },
+        {
+          "client_id": "626422287682-pi9juf3m56n9dae75oqsq7vgte1tsst5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8Enj9eVIJktf80CHSKebiMSSFscRm7AY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "626422287682-pi9juf3m56n9dae75oqsq7vgte1tsst5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
