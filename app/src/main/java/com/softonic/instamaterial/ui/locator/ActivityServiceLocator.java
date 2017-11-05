@@ -19,6 +19,8 @@ import com.softonic.instamaterial.domain.interactors.UploadPhoto;
 import com.softonic.instamaterial.domain.repository.RepositoryLocator;
 import com.softonic.instamaterial.ui.activity.comments.CommentsPresenter;
 import com.softonic.instamaterial.ui.activity.comments.CommentsPresenterLocator;
+import com.softonic.instamaterial.ui.activity.login.LoginPresenter;
+import com.softonic.instamaterial.ui.activity.login.LoginPresenterLocator;
 import com.softonic.instamaterial.ui.activity.main.MainPresenter;
 import com.softonic.instamaterial.ui.activity.main.MainPresenterLocator;
 import com.softonic.instamaterial.ui.activity.publish.PublishPresenter;
@@ -28,12 +30,18 @@ import com.softonic.instamaterial.ui.orchestrator.GetCommentItems;
 import com.softonic.instamaterial.ui.orchestrator.GetFeedItem;
 import com.softonic.instamaterial.ui.orchestrator.GetFeedItems;
 import com.softonic.instamaterial.ui.orchestrator.OrchestratorLocator;
+import com.softonic.instamaterial.ui.orchestrator.SignIn;
 
 public class ActivityServiceLocator
-        implements MainPresenterLocator, PublishPresenterLocator, CommentsPresenterLocator,
-        InteractorLocator, OrchestratorLocator {
+        implements MainPresenterLocator,
+        PublishPresenterLocator,
+        CommentsPresenterLocator,
+        InteractorLocator,
+        OrchestratorLocator,
+        LoginPresenterLocator {
 
     private MainPresenter mainPresenter;
+    private LoginPresenter loginPresenter;
     private PublishPresenter publishPresenter;
     private CommentsPresenter commentsPresenter;
     private GetPhoto getPhoto;
@@ -51,6 +59,7 @@ public class ActivityServiceLocator
     private GetFeedItems getFeedItems;
     private GetCommentItems getCommentItems;
     private GetCommentItem getCommentItem;
+    private SignIn signIn;
 
     @Override
     public MainPresenter mainPresenter(FragmentActivity activity) {
@@ -214,7 +223,23 @@ public class ActivityServiceLocator
         return getCommentItem;
     }
 
+    @Override
+    public SignIn signIn(FragmentActivity fragmentActivity) {
+        if (signIn==null){
+            signIn=new SignIn(useCaseExecutor(),fragmentActivity);
+        }
+        return signIn;
+    }
+
     private UseCaseExecutor useCaseExecutor() {
         return AppServiceLocator.getInstance().useCaseExecutor();
+    }
+
+    @Override
+    public LoginPresenter loginPresenter(FragmentActivity activity) {
+        if (loginPresenter == null) {
+            loginPresenter = new LoginPresenter(signIn(activity));
+        }
+        return loginPresenter;
     }
 }

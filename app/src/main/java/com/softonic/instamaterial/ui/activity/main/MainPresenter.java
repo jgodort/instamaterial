@@ -7,6 +7,7 @@ import com.softonic.instamaterial.domain.model.Like;
 import com.softonic.instamaterial.ui.model.FeedItem;
 import com.softonic.instamaterial.ui.orchestrator.GetFeedItem;
 import com.softonic.instamaterial.ui.orchestrator.GetFeedItems;
+import com.softonic.instamaterial.ui.orchestrator.SignOut;
 import com.softonic.instamaterial.ui.presenter.Presenter;
 
 import java.util.List;
@@ -22,15 +23,17 @@ public class MainPresenter extends Presenter<MainPresenter.View> {
     private final GetFeedItem getFeedItem;
     private final GetFeedItems getFeedItems;
     private final LikePhoto likePhoto;
+    private final SignOut signOut;
 
     private String currentUserUid;
 
     public MainPresenter(GetAuthenticatedUserUid getAuthenticatedUserUid, GetFeedItem getFeedItem,
-                         GetFeedItems getFeedItems, LikePhoto likePhoto) {
+                         GetFeedItems getFeedItems, LikePhoto likePhoto, SignOut signOut) {
         this.getAuthenticatedUserUid = getAuthenticatedUserUid;
         this.getFeedItem = getFeedItem;
         this.getFeedItems = getFeedItems;
         this.likePhoto = likePhoto;
+        this.signOut = signOut;
     }
 
     @Override
@@ -51,6 +54,7 @@ public class MainPresenter extends Presenter<MainPresenter.View> {
     }
 
     public void requestSignOut() {
+        signOut.execute(null, new SignOutCallback());
     }
 
     public void onRequestLike(String photoId, int likeSource) {
@@ -63,6 +67,11 @@ public class MainPresenter extends Presenter<MainPresenter.View> {
 
     public String getCurrentUserUid() {
         return currentUserUid;
+    }
+
+    public void onNotLoggedUser() {
+        view.showErrorNotLoggedUser();
+
     }
 
     public interface View extends Presenter.View {
@@ -85,6 +94,27 @@ public class MainPresenter extends Presenter<MainPresenter.View> {
         void showErrorWhileUpdatingFeed();
 
         void showErrorNotLoggedUser();
+
+        void showErrorWhileSigningOut();
+
+        void signedOut();
+    }
+
+    private class SignOutCallback implements UseCaseCallback<Boolean> {
+
+        @Override
+        public void onSuccess(Boolean result) {
+            if (result) {
+                view.signedOut();
+            } else {
+                view.showErrorWhileSigningOut();
+            }
+        }
+
+        @Override
+        public void onError(Exception exception) {
+            view.showErrorWhileSigningOut();
+        }
     }
 
     private class GetCurrentUserUidCallback implements UseCaseCallback<String> {

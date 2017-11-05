@@ -1,8 +1,8 @@
 package com.softonic.instamaterial.ui.activity.login;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.softonic.instamaterial.domain.common.UseCase;
 import com.softonic.instamaterial.domain.common.UseCaseCallback;
+import com.softonic.instamaterial.ui.orchestrator.SignIn;
 import com.softonic.instamaterial.ui.presenter.Presenter;
 
 /**
@@ -11,15 +11,15 @@ import com.softonic.instamaterial.ui.presenter.Presenter;
 
 public class LoginPresenter extends Presenter<LoginPresenter.View> {
 
-    private final UseCase singIn;
+    private final SignIn singIn;
 
-    public LoginPresenter(UseCase singIn) {
+    public LoginPresenter(SignIn singIn) {
         this.singIn = singIn;
     }
 
 
     public void handleSignInResult(GoogleSignInResult signInResult){
-        signInResult.handleSignInResult(signInResult);
+        singIn.handleSignInResult(signInResult);
     }
 
     public void requestLogin(int requestCode) {

@@ -20,6 +20,7 @@ import com.softonic.instamaterial.R;
 import com.softonic.instamaterial.ui.activity.BaseActivity;
 import com.softonic.instamaterial.ui.activity.TakePhotoActivity;
 import com.softonic.instamaterial.ui.activity.comments.CommentsActivity;
+import com.softonic.instamaterial.ui.activity.login.LoginActivity;
 import com.softonic.instamaterial.ui.adapter.FeedAdapter;
 import com.softonic.instamaterial.ui.adapter.FeedItemAnimator;
 import com.softonic.instamaterial.ui.locator.AppServiceLocator;
@@ -39,6 +40,7 @@ public class MainActivity extends BaseActivity
 
     private static final int ANIM_DURATION_TOOLBAR = 300;
     private static final int ANIM_DURATION_FAB = 400;
+    private static final int RC_LOGIN = 8001;
 
     @BindView(R.id.clContent)
     CoordinatorLayout clContent;
@@ -87,6 +89,19 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (RC_LOGIN==requestCode){
+            if (RESULT_OK==resultCode){
+                mainPresenter.requestLoggedUser();
+            }else{
+                mainPresenter.onNotLoggedUser();
+            }
+
+        }
+    }
+
+    @Override
     public void setupFeed(String userId) {
         feedAdapter = new FeedAdapter(this, userId);
         feedAdapter.setOnFeedItemClickListener(this);
@@ -131,6 +146,9 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void loginUser() {
+        Intent intent=new Intent(this, LoginActivity.class);
+        startActivityForResult(intent,RC_LOGIN);
+
     }
 
     @Override
@@ -170,9 +188,7 @@ public class MainActivity extends BaseActivity
         pbLoading.setVisibility(View.GONE);
         fabCreate.setVisibility(View.GONE);
         llNoElements.setVisibility(View.GONE);
-        Snackbar
-                .make(findViewById(R.id.root), R.string.user_not_logged,
-                        Snackbar.LENGTH_INDEFINITE)
+        Snackbar.make(findViewById(R.id.root), R.string.user_not_logged, Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.action_retry, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
