@@ -9,10 +9,9 @@ import com.softonic.instamaterial.data.repository.like.LikeDataSource;
 import com.softonic.instamaterial.data.repository.loggedUser.AuthenticatedUserDataRepository;
 import com.softonic.instamaterial.data.repository.loggedUser.FirebaseAuthenticatedUserDataSource;
 import com.softonic.instamaterial.data.repository.loggedUser.LoggedUserDataSource;
-import com.softonic.instamaterial.data.repository.photo.FakePhotoDataSource;
+import com.softonic.instamaterial.data.repository.photo.FirebasePhotoDataSource;
 import com.softonic.instamaterial.data.repository.photo.PhotoDataRepository;
 import com.softonic.instamaterial.data.repository.photo.PhotoDataSource;
-import com.softonic.instamaterial.data.repository.user.FakeUserDataSource;
 import com.softonic.instamaterial.data.repository.user.FirebaseUserDataSource;
 import com.softonic.instamaterial.data.repository.user.UserDataRepository;
 import com.softonic.instamaterial.data.repository.user.UserDataSource;
@@ -52,7 +51,7 @@ public class DataServiceLocator implements RepositoryLocator {
 
   private PhotoDataSource photoDataSource() {
     if (photoDataSource == null) {
-      photoDataSource = new FakePhotoDataSource();
+      photoDataSource = new FirebasePhotoDataSource();
     }
     return photoDataSource;
   }
