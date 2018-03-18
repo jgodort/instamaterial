@@ -11,46 +11,43 @@ import com.softonic.instamaterial.ui.presenter.Presenter;
 
 public class LoginPresenter extends Presenter<LoginPresenter.View> {
 
-    private final SignIn singIn;
+  private final SignIn singIn;
 
-    public LoginPresenter(SignIn singIn) {
-        this.singIn = singIn;
+  public LoginPresenter(SignIn singIn) {
+    this.singIn = singIn;
+  }
+
+  public void handleSignInResult(GoogleSignInResult signInResult) {
+    singIn.handleSignInResult(signInResult);
+  }
+
+  public void requestLogin(int requestCode) {
+    view.showLoading(true);
+    singIn.execute(requestCode, new SignInCallback());
+  }
+
+  public interface View extends Presenter.View {
+
+    void showLoading(boolean show);
+
+    void closeLoginRequest();
+
+    void showErrorWhileLoggingIn(String error);
+  }
+
+  private class SignInCallback implements UseCaseCallback<Boolean> {
+    @Override public void onSuccess(Boolean result) {
+      view.showLoading(false);
+      if (result) {
+        view.closeLoginRequest();
+      } else {
+        view.showErrorWhileLoggingIn(null);
+      }
     }
 
-
-    public void handleSignInResult(GoogleSignInResult signInResult){
-        singIn.handleSignInResult(signInResult);
+    @Override public void onError(Exception exception) {
+      view.showLoading(false);
+      view.showErrorWhileLoggingIn(exception.getMessage());
     }
-
-    public void requestLogin(int requestCode) {
-        view.showLoading(true);
-        singIn.execute(requestCode, new SignInCallback());
-    }
-
-    public interface View extends Presenter.View {
-
-        void showLoading(boolean show);
-
-        void closeLoginRequest();
-
-        void showErrorWhileLoggingIn(String error);
-    }
-
-    private class SignInCallback implements UseCaseCallback<Boolean> {
-        @Override
-        public void onSuccess(Boolean result) {
-            view.showLoading(false);
-            if (result) {
-                view.closeLoginRequest();
-            } else {
-                view.showErrorWhileLoggingIn(null);
-            }
-        }
-
-        @Override
-        public void onError(Exception exception) {
-            view.showLoading(false);
-            view.showErrorWhileLoggingIn(exception.getMessage());
-        }
-    }
+  }
 }

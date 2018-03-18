@@ -7,15 +7,14 @@ import com.softonic.instamaterial.domain.model.User;
 import com.softonic.instamaterial.domain.repository.UserRepository;
 
 public class UpdateUser extends UseCase<User, Boolean> {
-    private final UserRepository userRepository;
+  private final UserRepository userRepository;
 
-    public UpdateUser(UseCaseExecutor useCaseExecutor, UserRepository userRepository) {
-        super(useCaseExecutor);
-        this.userRepository = userRepository;
-    }
+  public UpdateUser(UseCaseExecutor useCaseExecutor, UserRepository userRepository) {
+    super(useCaseExecutor);
+    this.userRepository = userRepository;
+  }
 
-    @Override
-    public ObservableTask<Boolean> createObservableTask(User user) {
-        return userRepository.putUser(user);
-    }
+  @Override public ObservableTask<Boolean> createObservableTask(User user) {
+    return userRepository.putUser(user);
+  }
 }

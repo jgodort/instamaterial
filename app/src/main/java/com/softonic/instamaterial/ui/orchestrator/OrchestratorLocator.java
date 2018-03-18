@@ -3,13 +3,15 @@ package com.softonic.instamaterial.ui.orchestrator;
 import android.support.v4.app.FragmentActivity;
 
 public interface OrchestratorLocator {
-    GetFeedItem getFeedItem();
+  GetFeedItem getFeedItem();
 
-    GetFeedItems getFeedItems();
+  GetFeedItems getFeedItems();
 
-    GetCommentItems getCommentItems();
+  GetCommentItems getCommentItems();
 
-    GetCommentItem getCommentItem();
+  GetCommentItem getCommentItem();
 
-    SignIn signIn(FragmentActivity fragmentActivity);
+  SignIn signIn(FragmentActivity fragmentActivity);
+
+  SignOut signOut(FragmentActivity fragmentActivity);
 }

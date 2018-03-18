@@ -1,13 +1,13 @@
 package com.softonic.instamaterial.domain.repository;
 
 public interface RepositoryLocator {
-    PhotoRepository photoRepository();
+  PhotoRepository photoRepository();
 
-    UserRepository userRepository();
+  UserRepository userRepository();
 
-    LikeRepository likeRepository();
+  LikeRepository likeRepository();
 
-    CommentRepository commentRepository();
+  CommentRepository commentRepository();
 
-    AuthenticatedUserRepository loggedUserRepository();
+  AuthenticatedUserRepository loggedUserRepository();
 }

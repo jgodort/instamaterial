@@ -3,52 +3,59 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.softonic.instamaterial.ui.activity.login.LoginActivity">
+    tools:context="com.softonic.instamaterial.ui.activity.login.LoginActivity"
+    >
 
-    <LinearLayout
-        android:id="@+id/contentRoot"
+  <LinearLayout
+      android:id="@+id/contentRoot"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:layout_marginEnd="48dp"
+      android:layout_marginStart="48dp"
+      android:orientation="vertical"
+      >
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:text="@string/text_disclaimer"
+        android:textSize="20sp"
+        />
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/btnSingIn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+  </LinearLayout>
+
+  <FrameLayout
+      android:id="@+id/flLoading"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="#a0000000"
+      android:clickable="true"
+      android:visibility="gone"
+      >
+
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        android:layout_width="@dimen/size_huge"
+        android:layout_height="@dimen/size_huge"
         android:layout_gravity="center"
-        android:layout_marginEnd="48dp"
-        android:layout_marginStart="48dp"
-        android:orientation="vertical">
+        android:layout_marginTop="@dimen/size_huge"
+        style="?attr/indeterminateProgressStyle"
+        />
+  </FrameLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
-            android:text="@string/text_disclaimer"
-            android:textSize="20sp" />
+  <android.support.design.widget.AppBarLayout
+      android:id="@+id/appBarLayout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      >
 
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/btnSingIn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/flLoading"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#a0000000"
-        android:clickable="true"
-        android:visibility="gone">
-
-        <ProgressBar
-            android:id="@+id/pbLoading"
-            style="?attr/indeterminateProgressStyle"
-            android:layout_width="@dimen/size_huge"
-            android:layout_height="@dimen/size_huge"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/size_huge" />
-    </FrameLayout>
-
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <include layout="@layout/view_feed_toolbar" />
-    </android.support.design.widget.AppBarLayout>
+    <include layout="@layout/view_feed_toolbar"/>
+  </android.support.design.widget.AppBarLayout>
 </android.support.design.widget.CoordinatorLayout>

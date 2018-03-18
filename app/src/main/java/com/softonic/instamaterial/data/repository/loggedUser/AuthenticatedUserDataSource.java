@@ -7,5 +7,5 @@ import com.softonic.instamaterial.domain.common.ObservableTask;
  */
 
 interface AuthenticatedUserDataSource {
-    ObservableTask<String> get();
+  ObservableTask<String> get();
 }

@@ -4,7 +4,7 @@ import com.softonic.instamaterial.domain.common.ObservableTask;
 import com.softonic.instamaterial.domain.model.User;
 
 public interface UserDataSource {
-    ObservableTask<User> get(String userId);
+  ObservableTask<User> get(String userId);
 
-    ObservableTask<Boolean> put(User user);
+  ObservableTask<Boolean> put(User user);
 }

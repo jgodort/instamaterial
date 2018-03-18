@@ -8,15 +8,15 @@ import com.softonic.instamaterial.domain.model.UnpublishedComment;
 import com.softonic.instamaterial.domain.repository.CommentRepository;
 
 public class PublishComment extends UseCase<UnpublishedComment, Comment> {
-    private final CommentRepository commentRepository;
+  private final CommentRepository commentRepository;
 
-    public PublishComment(UseCaseExecutor useCaseExecutor, CommentRepository commentRepository) {
-        super(useCaseExecutor);
-        this.commentRepository = commentRepository;
-    }
+  public PublishComment(UseCaseExecutor useCaseExecutor, CommentRepository commentRepository) {
+    super(useCaseExecutor);
+    this.commentRepository = commentRepository;
+  }
 
-    @Override
-    public ObservableTask<Comment> createObservableTask(final UnpublishedComment unpublishedComment) {
-        return commentRepository.publishComment(unpublishedComment);
-    }
+  @Override
+  public ObservableTask<Comment> createObservableTask(final UnpublishedComment unpublishedComment) {
+    return commentRepository.publishComment(unpublishedComment);
+  }
 }

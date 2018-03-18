@@ -8,5 +8,5 @@ import android.support.v4.app.FragmentActivity;
 
 public interface LoginPresenterLocator {
 
-    LoginPresenter loginPresenter(FragmentActivity activity);
+  LoginPresenter loginPresenter(FragmentActivity activity);
 }

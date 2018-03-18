@@ -9,187 +9,171 @@ import com.softonic.instamaterial.ui.orchestrator.GetFeedItem;
 import com.softonic.instamaterial.ui.orchestrator.GetFeedItems;
 import com.softonic.instamaterial.ui.orchestrator.SignOut;
 import com.softonic.instamaterial.ui.presenter.Presenter;
-
 import java.util.List;
 
 public class MainPresenter extends Presenter<MainPresenter.View> {
-    public static final int LIKE_TAP_SOURCE_BUTTON = 0;
-    public static final int LIKE_TAP_SOURCE_IMAGE = 1;
-    public static final int LIKE_TAP_LIKED = 2;
-    public static final int LIKE_REMOTE_LIKE = 4;
-    public static final int LIKE_REMOTE_DISLIKE = 8;
+  public static final int LIKE_TAP_SOURCE_BUTTON = 0;
+  public static final int LIKE_TAP_SOURCE_IMAGE = 1;
+  public static final int LIKE_TAP_LIKED = 2;
+  public static final int LIKE_REMOTE_LIKE = 4;
+  public static final int LIKE_REMOTE_DISLIKE = 8;
 
-    private final GetAuthenticatedUserUid getAuthenticatedUserUid;
-    private final GetFeedItem getFeedItem;
-    private final GetFeedItems getFeedItems;
-    private final LikePhoto likePhoto;
-    private final SignOut signOut;
+  private final GetAuthenticatedUserUid getAuthenticatedUserUid;
+  private final GetFeedItem getFeedItem;
+  private final GetFeedItems getFeedItems;
+  private final LikePhoto likePhoto;
+  private final SignOut signOut;
 
-    private String currentUserUid;
+  private String currentUserUid;
 
-    public MainPresenter(GetAuthenticatedUserUid getAuthenticatedUserUid, GetFeedItem getFeedItem,
-                         GetFeedItems getFeedItems, LikePhoto likePhoto, SignOut signOut) {
-        this.getAuthenticatedUserUid = getAuthenticatedUserUid;
-        this.getFeedItem = getFeedItem;
-        this.getFeedItems = getFeedItems;
-        this.likePhoto = likePhoto;
-        this.signOut = signOut;
+  public MainPresenter(GetAuthenticatedUserUid getAuthenticatedUserUid, GetFeedItem getFeedItem,
+      GetFeedItems getFeedItems, LikePhoto likePhoto, SignOut signOut) {
+    this.getAuthenticatedUserUid = getAuthenticatedUserUid;
+    this.getFeedItem = getFeedItem;
+    this.getFeedItems = getFeedItems;
+    this.likePhoto = likePhoto;
+    this.signOut = signOut;
+  }
+
+  @Override public void attach(View view) {
+    super.attach(view);
+  }
+
+  public void requestLoggedUser() {
+    getAuthenticatedUserUid.execute(new GetCurrentUserUidCallback());
+  }
+
+  public void requestFeedItem(String photoId) {
+    getFeedItem.execute(photoId, new GetFeedItemCallback());
+  }
+
+  public void requestFeedItems() {
+    getFeedItems.execute(new GetFeedItemsCallback());
+  }
+
+  public void requestSignOut() {
+    signOut.execute(null, new SignOutCallback());
+  }
+
+  public void onRequestLike(String photoId, int likeSource) {
+    Like like = Like.Builder().photoId(photoId).userId(currentUserUid).build();
+    likePhoto.execute(like, new LikePhotoCallback(photoId, currentUserUid, likeSource));
+  }
+
+  public String getCurrentUserUid() {
+    return currentUserUid;
+  }
+
+  public void onNotLoggedUser() {
+    view.showErrorNotLoggedUser();
+  }
+
+  public interface View extends Presenter.View {
+    void setupFeed(String userId);
+
+    void updateFeed(List<FeedItem> feedItems);
+
+    void updatePhotoLike(String photoId, String userId, int likeTapFlags);
+
+    void addFeedItem(FeedItem feedItem);
+
+    void showEmptyFeed();
+
+    void loginUser();
+
+    void showErrorWhileRequestingFeed();
+
+    void showErrorWhileLikingPhoto();
+
+    void showErrorWhileUpdatingFeed();
+
+    void showErrorNotLoggedUser();
+
+    void showErrorWhileSigningOut();
+
+    void signedOut();
+  }
+
+  private class SignOutCallback implements UseCaseCallback<Boolean> {
+
+    @Override public void onSuccess(Boolean result) {
+      if (result) {
+        view.signedOut();
+      } else {
+        view.showErrorWhileSigningOut();
+      }
     }
 
-    @Override
-    public void attach(View view) {
-        super.attach(view);
+    @Override public void onError(Exception exception) {
+      view.showErrorWhileSigningOut();
     }
+  }
 
-    public void requestLoggedUser() {
-        getAuthenticatedUserUid.execute(new GetCurrentUserUidCallback());
-    }
+  private class GetCurrentUserUidCallback implements UseCaseCallback<String> {
 
-    public void requestFeedItem(String photoId) {
-        getFeedItem.execute(photoId, new GetFeedItemCallback());
-    }
-
-    public void requestFeedItems() {
-        getFeedItems.execute(new GetFeedItemsCallback());
-    }
-
-    public void requestSignOut() {
-        signOut.execute(null, new SignOutCallback());
-    }
-
-    public void onRequestLike(String photoId, int likeSource) {
-        Like like = Like.Builder()
-                .photoId(photoId)
-                .userId(currentUserUid)
-                .build();
-        likePhoto.execute(like, new LikePhotoCallback(photoId, currentUserUid, likeSource));
-    }
-
-    public String getCurrentUserUid() {
-        return currentUserUid;
-    }
-
-    public void onNotLoggedUser() {
-        view.showErrorNotLoggedUser();
-
-    }
-
-    public interface View extends Presenter.View {
-        void setupFeed(String userId);
-
-        void updateFeed(List<FeedItem> feedItems);
-
-        void updatePhotoLike(String photoId, String userId, int likeTapFlags);
-
-        void addFeedItem(FeedItem feedItem);
-
-        void showEmptyFeed();
-
-        void loginUser();
-
-        void showErrorWhileRequestingFeed();
-
-        void showErrorWhileLikingPhoto();
-
-        void showErrorWhileUpdatingFeed();
-
-        void showErrorNotLoggedUser();
-
-        void showErrorWhileSigningOut();
-
-        void signedOut();
-    }
-
-    private class SignOutCallback implements UseCaseCallback<Boolean> {
-
-        @Override
-        public void onSuccess(Boolean result) {
-            if (result) {
-                view.signedOut();
-            } else {
-                view.showErrorWhileSigningOut();
-            }
+    @Override public void onSuccess(String result) {
+      if (currentUserUid == null || !currentUserUid.equals(result)) {
+        currentUserUid = result;
+        if (currentUserUid != null) {
+          view.setupFeed(currentUserUid);
+          requestFeedItems();
+        } else {
+          view.loginUser();
         }
-
-        @Override
-        public void onError(Exception exception) {
-            view.showErrorWhileSigningOut();
-        }
+      }
     }
 
-    private class GetCurrentUserUidCallback implements UseCaseCallback<String> {
+    @Override public void onError(Exception exception) {
+      view.loginUser();
+    }
+  }
 
-        @Override
-        public void onSuccess(String result) {
-            if (currentUserUid == null || !currentUserUid.equals(result)) {
-                currentUserUid = result;
-                if (currentUserUid != null) {
-                    view.setupFeed(currentUserUid);
-                    requestFeedItems();
-                } else {
-                    view.loginUser();
-                }
-            }
-        }
+  private class GetFeedItemCallback implements UseCaseCallback<FeedItem> {
 
-        @Override
-        public void onError(Exception exception) {
-            view.loginUser();
-        }
+    @Override public void onSuccess(FeedItem result) {
+      view.addFeedItem(result);
     }
 
-    private class GetFeedItemCallback implements UseCaseCallback<FeedItem> {
+    @Override public void onError(Exception exception) {
+      view.showErrorWhileUpdatingFeed();
+    }
+  }
 
-        @Override
-        public void onSuccess(FeedItem result) {
-            view.addFeedItem(result);
-        }
+  private class GetFeedItemsCallback implements UseCaseCallback<List<FeedItem>> {
 
-        @Override
-        public void onError(Exception exception) {
-            view.showErrorWhileUpdatingFeed();
-        }
+    @Override public void onSuccess(List<FeedItem> feedItems) {
+      if (feedItems.isEmpty()) {
+        view.showEmptyFeed();
+      } else {
+        view.updateFeed(feedItems);
+      }
     }
 
-    private class GetFeedItemsCallback implements UseCaseCallback<List<FeedItem>> {
+    @Override public void onError(Exception exception) {
+      view.showErrorWhileRequestingFeed();
+    }
+  }
 
-        @Override
-        public void onSuccess(List<FeedItem> feedItems) {
-            if (feedItems.isEmpty()) {
-                view.showEmptyFeed();
-            } else {
-                view.updateFeed(feedItems);
-            }
-        }
+  private class LikePhotoCallback implements UseCaseCallback<Boolean> {
+    private final String photoId;
+    private final String userId;
 
-        @Override
-        public void onError(Exception exception) {
-            view.showErrorWhileRequestingFeed();
-        }
+    private final int likeSource;
+
+    private LikePhotoCallback(String photoId, String userId, int likeSource) {
+      this.photoId = photoId;
+      this.userId = userId;
+      this.likeSource = likeSource;
     }
 
-    private class LikePhotoCallback implements UseCaseCallback<Boolean> {
-        private final String photoId;
-        private final String userId;
-
-        private final int likeSource;
-
-        private LikePhotoCallback(String photoId, String userId, int likeSource) {
-            this.photoId = photoId;
-            this.userId = userId;
-            this.likeSource = likeSource;
-        }
-
-        @Override
-        public void onSuccess(Boolean result) {
-            int likeSourceFlags = likeSource;
-            likeSourceFlags |= result ? LIKE_TAP_LIKED : 0;
-            view.updatePhotoLike(photoId, userId, likeSourceFlags);
-        }
-
-        @Override
-        public void onError(Exception exception) {
-            view.showErrorWhileLikingPhoto();
-        }
+    @Override public void onSuccess(Boolean result) {
+      int likeSourceFlags = likeSource;
+      likeSourceFlags |= result ? LIKE_TAP_LIKED : 0;
+      view.updatePhotoLike(photoId, userId, likeSourceFlags);
     }
+
+    @Override public void onError(Exception exception) {
+      view.showErrorWhileLikingPhoto();
+    }
+  }
 }
